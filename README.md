@@ -1,6 +1,6 @@
 # Calver Releaser for Github Actions
 
-Create calver release
+Create calver release (YYYY.VV)
 
 ## Inputs
 
@@ -8,9 +8,13 @@ Create calver release
 
 Branch to tag. Default `master`.
 
+### `name`
+
+The title of the release. Default `release: version ${NEXT_RELEASE}`.
+
 ### `message`
 
-The message of the release. Default `release: version ${NEXT_RELEASE}`.
+The message of the release. Default `${NEXT_RELEASE}`.
 
 ### `draft`
 
@@ -20,11 +24,28 @@ Is a draft ?. Default `false`.
 
 Is a pre-release ?. Default `false`.
 
+## Output
+
+### `release`
+
+The new release
+
 ## Example usage
 
 ```yaml
-- name: Calver Release
-  uses: StephaneBour/actions-calver@master
-  env:
-    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    steps:
+      - uses: actions/checkout@v2
+      - run: git fetch --depth=1 origin +refs/tags/*:refs/tags/*
+        
+      - name: Calver Release
+        uses: StephaneBour/actions-calver@master
+        id: calver
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Deploy
+        env:
+          VERSION: ${{ steps.calver.outputs.release }}
+        run: ./deploy ${VERSION}
 ```

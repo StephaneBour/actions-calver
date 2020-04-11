@@ -11,6 +11,10 @@ inputs:
     description: 'Branch to tag'
     required: true
     default: master
+  name:
+    description: 'The title of the release'
+    required: true
+    default: '0'
   message:
     description: 'The message of the release'
     required: true
@@ -25,14 +29,15 @@ inputs:
     default: 'false'
 
 outputs:
-  tag:
-    description: 'The newly created tag'
+  release:
+    description: 'The newly created release'
 
 runs:
   using: 'docker'
   image: 'Dockerfile'
   args:
     - ${{ inputs.release_branch }}
+    - ${{ inputs.name }}
     - ${{ inputs.message }}
     - ${{ inputs.draft }}
     - ${{ inputs.pre }}
