@@ -29,7 +29,7 @@ echo "Last major release : ${MAJOR_LAST_RELEASE}"
 
 if [ "${MAJOR_LAST_RELEASE}" = "${NEXT_RELEASE}" ]; then
     MINOR_LAST_RELEASE=$(echo "${LAST_RELEASE}" | awk  '{ string=substr($0, 9); print string; }' )
-    NEXT_RELEASE=${MAJOR_LAST_RELEASE}.$(("${MINOR_LAST_RELEASE}" + 1))
+    NEXT_RELEASE=${MAJOR_LAST_RELEASE}.$((${MINOR_LAST_RELEASE} + 1))
     echo "Minor release"
 fi
 
