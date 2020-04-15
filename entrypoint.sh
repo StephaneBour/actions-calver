@@ -43,11 +43,12 @@ if [ "${NAME}" = "0" ]; then
 fi
 
 if [ "${MESSAGE}" = "0" ]; then
-	MESSAGE="${NEXT_RELEASE}"
+  MESSAGE=$(conventional-changelog)
 fi
 
-
 echo "Next release : ${NEXT_RELEASE}"
+
+echo "${MESSAGE}"
 
 if [ "${CREATE_RELEASE}" = "true" ]; then
   API_JSON=$(printf '{"tag_name": "%s","target_commitish": "%s","name": "%s","body": "%s","draft": %s,"prerelease": %s}' "$NEXT_RELEASE" "$BRANCH" "$NEXT_RELEASE" "$MESSAGE" "$DRAFT" "$PRE" )

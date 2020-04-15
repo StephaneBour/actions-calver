@@ -14,7 +14,7 @@ The title of the release. Default `release: version ${NEXT_RELEASE}`.
 
 ### `message`
 
-The message of the release. Default `${NEXT_RELEASE}`.
+The message of the release. Default generate conventional changelog.
 
 ### `draft`
 
