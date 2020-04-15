@@ -27,6 +27,10 @@ inputs:
     description: 'Is pre-release ?'
     required: true
     default: 'false'
+  release:
+    description: 'Create new release'
+    required: true
+    default: 'true'
 
 outputs:
   release:
@@ -41,3 +45,4 @@ runs:
     - ${{ inputs.message }}
     - ${{ inputs.draft }}
     - ${{ inputs.pre }}
+    - ${{ inputs.release }}

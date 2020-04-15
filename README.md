@@ -24,11 +24,15 @@ Is a draft ?. Default `false`.
 
 Is a pre-release ?. Default `false`.
 
+### `release`
+
+Create a new release ?. Default `true`.
+
 ## Output
 
 ### `release`
 
-The new release
+The new release name.
 
 ## Example usage
 
