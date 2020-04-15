@@ -28,6 +28,12 @@ Is a pre-release ?. Default `false`.
 
 Create a new release ?. Default `true`.
 
+### `date_format`
+
+Set the date format in posix shell. Default `%Y.%V` (Year.Week - 2020.45).
+
+
+
 ## Output
 
 ### `release`
@@ -40,11 +46,12 @@ The new release name.
 
     steps:
       - uses: actions/checkout@v2
-      - run: git fetch --depth=1 origin +refs/tags/*:refs/tags/*
         
       - name: Calver Release
         uses: StephaneBour/actions-calver@master
         id: calver
+        with:
+          date_format: "%Y-%m-%d"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

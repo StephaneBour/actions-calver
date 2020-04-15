@@ -31,6 +31,10 @@ inputs:
     description: 'Create new release'
     required: true
     default: 'true'
+  date_format:
+    description: 'Format date in posix shell'
+    required: true
+    default: '%Y.%V'
 
 outputs:
   release:
@@ -46,3 +50,4 @@ runs:
     - ${{ inputs.draft }}
     - ${{ inputs.pre }}
     - ${{ inputs.release }}
+    - ${{ inputs.date_format }}

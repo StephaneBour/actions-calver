@@ -17,23 +17,23 @@ MESSAGE="${3}"
 DRAFT="${4}"
 PRE="${5}"
 CREATE_RELEASE="${6}"
+DATE_FORMAT="${7}"
 
 # Fetch git tags
 git fetch --depth=1 origin +refs/tags/*:refs/tags/*
 
-NEXT_RELEASE=$(date '+%Y.%V')
+NEXT_RELEASE=$(date "+${DATE_FORMAT}")
 
 LAST_HASH=$(git rev-list --tags --max-count=1)
 echo "Last hash : ${LAST_HASH}"
 
 LAST_RELEASE=$(git describe --tags "${LAST_HASH}")
 echo "Last release : ${LAST_RELEASE}"
-
-MAJOR_LAST_RELEASE=$(echo "${LAST_RELEASE}" | awk  '{ string=substr($0, 1, 7); print string; }' )
+MAJOR_LAST_RELEASE=$(echo "${LAST_RELEASE}" | awk -v l=${#NEXT_RELEASE} '{ string=substr($0, 1, l); print string; }' )
 echo "Last major release : ${MAJOR_LAST_RELEASE}"
 
 if [ "${MAJOR_LAST_RELEASE}" = "${NEXT_RELEASE}" ]; then
-    MINOR_LAST_RELEASE=$(echo "${LAST_RELEASE}" | awk  '{ string=substr($0, 9); print string; }' )
+    MINOR_LAST_RELEASE=$(echo "${LAST_RELEASE}" | awk -v l=`expr ${#NEXT_RELEASE} + 2` '{ string=substr($0, l); print string; }' )
     NEXT_RELEASE=${MAJOR_LAST_RELEASE}.$((${MINOR_LAST_RELEASE} + 1))
     echo "Minor release"
 fi
