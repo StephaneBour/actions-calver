@@ -50,9 +50,20 @@ echo "Next release : ${NEXT_RELEASE}"
 
 echo "${MESSAGE}"
 
-if [ "${CREATE_RELEASE}" = "true" ]; then
-  API_JSON=$(printf '{"tag_name": "%s","target_commitish": "%s","name": "%s","body": "%s","draft": %s,"prerelease": %s}' "$NEXT_RELEASE" "$BRANCH" "$NEXT_RELEASE" "$MESSAGE" "$DRAFT" "$PRE" )
-  curl --fail --data "${API_JSON}" -s -i "https://api.github.com/repos/${GITHUB_REPOSITORY}/releases?access_token=${GITHUB_TOKEN}"
+echo "Create release : ${CREATE_RELEASE}"
+
+if [ "${CREATE_RELEASE}" = "true" ] || [ "${CREATE_RELEASE}" = true ]; then
+  JSON_STRING=$( jq -n \
+                    --arg tn "$NEXT_RELEASE" \
+                    --arg tc "$BRANCH" \
+                    --arg n "$NEXT_RELEASE" \
+                    --arg b "$MESSAGE" \
+                    --argjson d "$DRAFT" \
+                    --argjson p "$PRE" \
+                    '{tag_name: $tn, target_commitish: $tc, name: $n, body: $b, draft: $d, prerelease: $p}' )
+  echo ${JSON_STRING}
+  OUTPUT=$(curl -s --data "${JSON_STRING}" "https://api.github.com/repos/${GITHUB_REPOSITORY}/releases?access_token=${GITHUB_TOKEN}")
+  echo ${OUTPUT} | jq
 fi;
 
 echo ::set-output name=release::"${NEXT_RELEASE}"
