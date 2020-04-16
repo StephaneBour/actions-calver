@@ -52,6 +52,7 @@ The new release name.
         id: calver
         with:
           date_format: "%Y-%m-%d"
+          release: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
