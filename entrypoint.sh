@@ -62,7 +62,7 @@ if [ "${CREATE_RELEASE}" = "true" ] || [ "${CREATE_RELEASE}" = true ]; then
                     --argjson p "$PRE" \
                     '{tag_name: $tn, target_commitish: $tc, name: $n, body: $b, draft: $d, prerelease: $p}' )
   echo ${JSON_STRING}
-  OUTPUT=$(curl -s --data "${JSON_STRING}" "https://api.github.com/repos/${GITHUB_REPOSITORY}/releases?access_token=${GITHUB_TOKEN}")
+  OUTPUT=$(curl -s --data "${JSON_STRING}" -H "Authorization: token ${GITHUB_TOKEN}" "https://api.github.com/repos/${GITHUB_REPOSITORY}/releases")
   echo ${OUTPUT} | jq
 fi;
 
