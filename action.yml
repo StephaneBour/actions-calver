@@ -9,31 +9,31 @@ branding:
 inputs:
   release_branch:
     description: 'Branch to tag'
-    required: true
+    required: false
     default: master
   name:
     description: 'The title of the release'
-    required: true
+    required: false
     default: '0'
   message:
     description: 'The message of the release'
-    required: true
+    required: false
     default: '0'
   draft:
     description: 'Is draft ?'
-    required: true
+    required: false
     default: 'false'
   pre:
     description: 'Is pre-release ?'
-    required: true
+    required: false
     default: 'false'
   release:
     description: 'Create new release'
-    required: true
+    required: false
     default: 'true'
   date_format:
     description: 'Format date in posix shell'
-    required: true
+    required: false
     default: '%Y.%V'
 
 outputs:
