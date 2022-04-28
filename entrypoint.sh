@@ -19,6 +19,9 @@ PRE="${5}"
 CREATE_RELEASE="${6}"
 DATE_FORMAT="${7}"
 
+# Security
+git config --global --add safe.directory /github/workspace
+
 # Fetch git tags
 git fetch --depth=1 origin +refs/tags/*:refs/tags/*
 
