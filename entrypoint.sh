@@ -62,7 +62,7 @@ if [ "${CREATE_RELEASE}" = "true" ] || [ "${CREATE_RELEASE}" = true ]; then
   JSON_STRING=$(jq -n \
     --arg tn "$NEXT_RELEASE" \
     --arg tc "$BRANCH" \
-    --arg n "$NEXT_RELEASE" \
+    --arg n "$NAME" \
     --arg b "$MESSAGE" \
     --argjson d "$DRAFT" \
     --argjson p "$PRE" \
