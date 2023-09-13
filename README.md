@@ -32,6 +32,8 @@ Create a new release ?. Default `true`.
 
 Set the date format in posix shell. Default `%Y.%V` (Year.Week - 2020.45).
 
+### `version_regexp`
+Extended regexp for grep to match existing versions. It has to be consistent with `date_format`. Default `^20[^\-]*$` (catches everything without `-` starting `20`).
 
 
 ## Output
