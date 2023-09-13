@@ -17,6 +17,7 @@ DRAFT="${4}"
 PRE="${5}"
 CREATE_RELEASE="${6}"
 DATE_FORMAT="${7}"
+VERSION_REGEXP="${8}"
 
 # Security
 git config --global --add safe.directory /github/workspace
@@ -28,7 +29,7 @@ NEXT_RELEASE=$(date "+${DATE_FORMAT}")
 
 # ColemanB - Script looks for tags meeting requirements
 # and then looks up hash.
-LAST_RELEASE=$(git tag --sort=v:refname | grep "^20[^\-]*$" | tail -n 1)
+LAST_RELEASE=$(git tag --sort=v:refname | grep -E "${VERSION_REGEXP}" | tail -n 1)
 echo "Last release : ${LAST_RELEASE}"
 
 LAST_HASH="$(git show-ref -s "${LAST_RELEASE}")"

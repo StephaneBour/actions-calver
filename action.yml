@@ -35,6 +35,10 @@ inputs:
     description: 'Format date in posix shell'
     required: false
     default: '%Y.%V'
+  version_regexp:
+    description: 'Extended regexp for grep to match existing versions'
+    required: false
+    default: '^20[^\-]*$'
 
 outputs:
   release:
@@ -51,3 +55,4 @@ runs:
     - ${{ inputs.pre }}
     - ${{ inputs.release }}
     - ${{ inputs.date_format }}
+    - ${{ inputs.version_regexp }}
