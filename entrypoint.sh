@@ -2,7 +2,7 @@
 
 set -u
 
-cd /github/workspace || exit 1
+cd "${GITHUB_WORKSPACE}" || exit 1
 
 # Env and options
 if [ -z "${GITHUB_TOKEN}" ]; then
@@ -20,7 +20,7 @@ DATE_FORMAT="${7}"
 VERSION_REGEXP="${8}"
 
 # Security
-git config --global --add safe.directory /github/workspace
+git config --global --add safe.directory "${GITHUB_WORKSPACE}"
 
 # Fetch git tags
 git fetch --depth=1 origin +refs/tags/*:refs/tags/*
