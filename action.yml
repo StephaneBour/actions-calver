@@ -39,10 +39,23 @@ inputs:
     description: 'Extended regexp for grep to match existing versions'
     required: false
     default: '^20[^\-]*$'
+  patch_separator:
+    description: 'Separator to use between version and patch level'
+    default: '.'
 
 outputs:
   release:
-    description: 'The newly created release'
+    description: 'The newly created release version'
+  title:
+    description: 'Release title'
+  changelog:
+    description: 'Changelog generated for the release body'
+  draft:
+    description: 'Is the release a draft'
+  pre:
+    description: 'Is the release a pre-release'
+  created:
+    description: 'Was a release created'
 
 runs:
   using: 'docker'
@@ -56,3 +69,4 @@ runs:
     - ${{ inputs.release }}
     - ${{ inputs.date_format }}
     - ${{ inputs.version_regexp }}
+    - ${{ inputs.patch_separator }}

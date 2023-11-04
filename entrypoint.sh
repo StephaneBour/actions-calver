@@ -18,6 +18,7 @@ PRE="${5}"
 CREATE_RELEASE="${6}"
 DATE_FORMAT="${7}"
 VERSION_REGEXP="${8}"
+PATCH_SEPARATOR="${9}"
 
 # Security
 git config --global --add safe.directory "${GITHUB_WORKSPACE}"
@@ -41,7 +42,7 @@ echo "Last major release : ${MAJOR_LAST_RELEASE}"
 
 if [ "${MAJOR_LAST_RELEASE}" = "${NEXT_RELEASE}" ]; then
   MINOR_LAST_RELEASE="$(echo "${LAST_RELEASE}" | awk -v l=$((${#NEXT_RELEASE} + 2)) '{ string=substr($0, l); print string; }')"
-  NEXT_RELEASE=${MAJOR_LAST_RELEASE}.$((MINOR_LAST_RELEASE + 1))
+  NEXT_RELEASE=${MAJOR_LAST_RELEASE}${PATCH_SEPARATOR}$((MINOR_LAST_RELEASE + 1))
   echo "Minor release"
 fi
 
@@ -73,10 +74,13 @@ if [ "${CREATE_RELEASE}" = "true" ] || [ "${CREATE_RELEASE}" = true ]; then
   echo "${OUTPUT}" | jq
 fi
 
-echo "release=${NEXT_RELEASE}" >>$GITHUB_OUTPUT
-echo "title=${NAME}" >>$GITHUB_OUTPUT
-echo "changelog=${MESSAGE}" >>$GITHUB_OUTPUT
-echo "draft=${DRAFT}" >>$GITHUB_OUTPUT
-echo "pre=${PRE}" >>$GITHUB_OUTPUT
-
-
+{
+  echo "release=${NEXT_RELEASE}";
+  echo "title=${NAME}";
+  echo "draft=${DRAFT}";
+  echo "pre=${PRE}";
+  echo "created=${CREATE_RELEASE}";
+  echo "changelog<<EOF";
+  echo "${MESSAGE}";
+  echo "EOF";
+} >> "${GITHUB_OUTPUT}"

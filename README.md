@@ -33,14 +33,38 @@ Create a new release ?. Default `true`.
 Set the date format in posix shell. Default `%Y.%V` (Year.Week - 2020.45).
 
 ### `version_regexp`
+
 Extended regexp for grep to match existing versions. It has to be consistent with `date_format`. Default `^20[^\-]*$` (catches everything without `-` starting `20`).
 
+### `patch_separator`
+
+Separator to use between version and patch level. Default: `.`
 
 ## Output
 
 ### `release`
 
-The new release name.
+The new release version.
+
+### `title`
+
+Release title
+
+### `changelog`
+
+Changelog generated for the release body
+
+### `draft`
+
+Is the release a draft
+
+### `pre`
+
+Is the release a pre-release
+
+### `created`
+
+Was a release created
 
 ## Example usage
 
