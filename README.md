@@ -2,6 +2,16 @@
 
 Create calver release (YYYY.VV)
 
+## Race Condition Protection
+
+This action includes protection against race conditions. If a commit is no longer at the HEAD of the branch at the time of execution, the release creation will be skipped. This ensures that only the most recent commit creates a release, thus preventing out-of-order versions.
+
+**Example of a protected scenario:**
+- Commit 1 merged → CI takes 10 minutes
+- Commit 2 merged → CI takes 2 minutes
+- Commit 2 finishes and creates the release (because it is HEAD)
+- Commit 1 finishes but does not create a release (because it is no longer HEAD)
+
 ## Inputs
 
 ### `release_branch`
@@ -68,21 +78,66 @@ Was a release created
 
 ## Example usage
 
-```yaml
+### Configuration de base
 
+```yaml
+steps:
+  - uses: actions/checkout@v2
+    
+  - name: Calver Release
+    uses: StephaneBour/actions-calver@master
+    id: calver
+    with:
+      date_format: "%Y-%m-%d"
+      release: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  - name: Deploy
+    env:
+      VERSION: ${{ steps.calver.outputs.release }}
+    run: ./deploy ${VERSION}
+```
+
+### Configuration recommandée avec concurrency group
+
+Pour une protection maximale contre les race conditions, utilisez un concurrency group :
+
+```yaml
+name: Release
+
+on:
+  push:
+    branches:
+      - master
+
+# Prevent concurrent releases
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+        
+      - name: Run tests
+        run: npm test
         
       - name: Calver Release
         uses: StephaneBour/actions-calver@master
         id: calver
         with:
-          date_format: "%Y-%m-%d"
-          release: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
+          date_format: "%Y.%V"
+          release: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Deploy
+        if: steps.calver.outputs.created == 'true'
         env:
           VERSION: ${{ steps.calver.outputs.release }}
         run: ./deploy ${VERSION}

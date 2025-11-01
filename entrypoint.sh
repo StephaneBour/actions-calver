@@ -23,8 +23,33 @@ PATCH_SEPARATOR="${9}"
 # Security
 git config --global --add safe.directory "${GITHUB_WORKSPACE}"
 
-# Fetch git tags
+# Fetch git tags and latest branch
 git fetch --depth=1 origin +refs/tags/*:refs/tags/*
+git fetch origin "${BRANCH}"
+
+# Race condition prevention: Check if current commit is HEAD of branch
+CURRENT_COMMIT="${GITHUB_SHA}"
+BRANCH_HEAD=$(git rev-parse "origin/${BRANCH}")
+
+echo "Current commit: ${CURRENT_COMMIT}"
+echo "Branch HEAD: ${BRANCH_HEAD}"
+
+if [ "${CURRENT_COMMIT}" != "${BRANCH_HEAD}" ]; then
+  echo "⚠️  Current commit is not at the HEAD of ${BRANCH}."
+  echo "Skipping release creation to avoid race condition."
+  echo "Another commit has been merged after this one."
+  {
+    echo "release=";
+    echo "title=";
+    echo "draft=${DRAFT}";
+    echo "pre=${PRE}";
+    echo "created=false";
+    echo "changelog=Skipped: not HEAD of branch";
+  } >> "${GITHUB_OUTPUT}"
+  exit 0
+fi
+
+echo "✓ Current commit is HEAD of ${BRANCH}, proceeding with release."
 
 NEXT_RELEASE=$(date "+${DATE_FORMAT}")
 
